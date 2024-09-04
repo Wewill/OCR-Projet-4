@@ -20,6 +20,11 @@ const formData = document.querySelectorAll(".formData");
 
 // Form 
 const form = document.getElementById('form');
+let data = new FormData(form);
+// Reset all fields
+// form.reset();
+
+document.getElementById("submit-success").style.display = "none";
 
 // Validation functions
 function inputValidation(field) {
@@ -27,7 +32,7 @@ function inputValidation(field) {
 }
 
 function textValidation(field) {
- 	return (document.getElementById(field).value !== null && document.getElementById(field).value.length > document.getElementById(field).getAttribute("minlength")) ? true : false;
+ 	return (document.getElementById(field).value !== null && document.getElementById(field).value.length >= document.getElementById(field).getAttribute("minlength")) ? true : false;
 }
 
  function emailValidation(field) {
@@ -36,7 +41,8 @@ function textValidation(field) {
  }
 
  function dateValidation(field) {
-  let regex = /^(0?[1-9]|[12][0-9]|3[01])[\/](0?[1-9]|1[012])[\/\-]\d{4}$/;
+  console.log(document.getElementById(field).value);
+  let regex = /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/;
   return regex.test(document.getElementById(field).value);
 }
 
@@ -58,7 +64,7 @@ function textValidation(field) {
 
  // Submit function 
  document
- 	.getElementById("submit")
+ 	.getElementById("btn-submit")
  	.addEventListener("click", function formValidation(event) {
  		event.preventDefault();
  		let isValid = true;
@@ -114,11 +120,13 @@ function textValidation(field) {
 
     // Then submit 
  		if (isValid) {
-      console.log("Form is valid > submit")
- 			form.submit();
- 		} else 
+      console.log("Form is valid > submit");
+ 			//form.submit();
+      document.getElementById("submit-success").style.display = "block";
+ 		} else {
       console.log("Form is not valid > show errors")
-
+      document.getElementById("submit-success").style.display = "none";
+    }
  	});
 
 
