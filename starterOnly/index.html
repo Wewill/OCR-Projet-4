@@ -18,8 +18,8 @@
     </div>
     <div class="main-navbar">
       
-      <a href="#" class="active"><span>Accueil</span></a>
-      <a href="#"><span>Détails de l'évènement</span></a>
+      <!-- <a href="#" class="active"><span>Accueil</span></a> -->
+      <a href="#" class="active"><span>Détails de l'évènement</span></a>
       <a href="#"><span>À propos</span></a>
       <a href="#"><span>Contact</span></a>
       <a href="#"><span>Évènements passés</span></a>
@@ -53,6 +53,7 @@
 
       <div class="bground">
         <div class="content">
+          <div class="modal-header"></div>
           <span class="close close-btn"></span>
           <div class="modal-body">
             <form
@@ -104,7 +105,7 @@
               </div>
               <div
                 class="formData">
-                <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
+                <label for="quantity">À combien de tournois avez-vous déjà participé ?</label><br>
                 <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
               </div>
               <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
@@ -206,9 +207,15 @@
                 value="C'est parti"
              >
             </form>
-            <p class="success" id="submit-success">Merci ! Votre réservation a été reçue.</p>
+            <p class="success" id="submit-success">Merci pour votre inscription</p>
           </div>
-        </div>
+          <input
+          class="button close-btn"
+          type="button"
+          id="btn-reset"
+          value="Fermer"
+        >
+      </div>
       </div>
     </main>
     <footer>
