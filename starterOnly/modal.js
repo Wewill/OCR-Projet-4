@@ -1,12 +1,23 @@
 // Nav functions
-function editNav() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
+// function editNav() {
+//   var x = document.getElementById("myTopnav");
+//   if (x.className === "topnav") {
+//     x.className += " responsive";
+//   } else {
+//     x.className = "topnav";
+//   }
+// }
+document
+  .getElementById("myTopnav-button")
+  .addEventListener("click", function editNav(event) {
+    event.preventDefault();
+    let myTopnav = document.getElementById("myTopnav");
+    if (myTopnav.className === "topnav") {
+      myTopnav.className += " responsive";
+    } else {
+      myTopnav.className = "topnav";
+    }
+  });
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
@@ -20,114 +31,139 @@ const formData = document.querySelectorAll(".formData");
 
 // Form 
 const form = document.getElementById('form');
-let data = new FormData(form);
-// Reset all fields
-// form.reset();
-
 document.getElementById("submit-success").style.display = "none";
 
 // Validation functions
+/**
+ * 
+ * @param {String} field 
+ */
 function inputValidation(field) {
-  return (document.getElementById(field).value !== null) ? true : false;
+  return document.getElementById(field).value !== null;
 }
 
+/**
+ * 
+ * @param {String} field 
+ */
 function textValidation(field) {
- 	return (document.getElementById(field).value !== null && document.getElementById(field).value.length >= document.getElementById(field).getAttribute("minlength")) ? true : false;
+  return (document.getElementById(field).value !== null && document.getElementById(field).value.length >= document.getElementById(field).getAttribute("minlength"));
 }
 
- function emailValidation(field) {
- 	let regex = /^([a-z0-9_\.-]+\@[\da-z\.-]+\.[a-z\.]{2,6})$/;
- 	return regex.test(document.getElementById(field).value);
- }
+/**
+ * 
+ * @param {String} field 
+ */
+function emailValidation(field) {
+  let regex = /^([a-z0-9_\.-]+\@[\da-z\.-]+\.[a-z\.]{2,6})$/;
+  return regex.test(document.getElementById(field).value);
+}
 
- function dateValidation(field) {
-  console.log(document.getElementById(field).value);
+/**
+ * 
+ * @param {String} field 
+ */
+function dateValidation(field) {
   let regex = /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/;
   return regex.test(document.getElementById(field).value);
 }
 
- function quantityValidation(field) {
- 	let regex = /^[0-9]+$/;
- 	return regex.test(document.getElementById(field).value);
- }
+/**
+ * 
+ * @param {String} field 
+ */
+function quantityValidation(field) {
+  let regex = /^[0-9]+$/;
+  return regex.test(document.getElementById(field).value);
+}
 
- function locationValidation() {
- 	for (let radio of document.querySelectorAll(".checkbox-input[type=radio]")) {
- 		if (radio.checked === true) return true;
- 	}
- 	return false;
- }
+function locationValidation() {
+  for (let radio of document.querySelectorAll(".checkbox-input[type=radio]")) {
+    if (radio.checked === true) return true;
+  }
+  return false;
+}
 
- function checkboxValidation(field) {
- 	return document.getElementById(field).checked;
- }
+/**
+ * 
+ * @param {String} field 
+ */
+function checkboxValidation(field) {
+  return document.getElementById(field).checked;
+}
 
- // Submit function 
- document
- 	.getElementById("btn-submit")
- 	.addEventListener("click", function formValidation(event) {
- 		event.preventDefault();
- 		let isValid = true;
-    // Validate
-    if (!textValidation("first")) {
-      document.getElementById("first").parentNode.setAttribute("data-error", "Veuillez entrer 2 caractères ou plus pour le champ du prénom.");
-      document.getElementById("first").parentNode.setAttribute("data-error-visible", true);
- 			isValid = false;
-    } else 
-      document.getElementById("first").parentNode.setAttribute("data-error-visible", false);
+// Error function
+function throwError(field, message) {
+  if (field == 'location') field = 'location1';
+  document.getElementById(field).parentNode.setAttribute("data-error", message);
+  document.getElementById(field).parentNode.setAttribute("data-error-visible", true);
+}
 
- 		if (!textValidation("last")) {
-      document.getElementById("last").parentNode.setAttribute("data-error", "Veuillez entrer 2 caractères ou plus pour le champ du nom.");
-      document.getElementById("last").parentNode.setAttribute("data-error-visible", true);
- 			isValid = false;
-    } else 
-      document.getElementById("last").parentNode.setAttribute("data-error-visible", false);
+// Reset function
+function resetError(field) {
+  if (field == 'location') field = 'location1';
+  document.getElementById(field).parentNode.setAttribute("data-error-visible", false);
+}
 
-    if (!dateValidation("birthdate")) {
-      document.getElementById("birthdate").parentNode.setAttribute("data-error", "Veuillez entrer une date de naissance.");
-      document.getElementById("birthdate").parentNode.setAttribute("data-error-visible", true);
-        isValid = false;
-    } else 
-      document.getElementById("birthdate").parentNode.setAttribute("data-error-visible", false);  
+// Submit function 
+document
+  .getElementById("btn-submit")
+  .addEventListener("click", function formValidation(event) {
+    event.preventDefault();
+    let formData = new FormData(form);
+    let isValid = true;
 
- 		if (!emailValidation("email")) {
-      document.getElementById("email").parentNode.setAttribute("data-error", "Veuillez entrer un email valide.");
-      document.getElementById("email").parentNode.setAttribute("data-error-visible", true);
- 			isValid = false;
-    } else 
-      document.getElementById("email").parentNode.setAttribute("data-error-visible", false);
+    // Default : Transform radio and checkbox null value first state  
+    if (formData.get("location") === null) formData.append("location", "");
+    if (formData.get("checkbox1") === null) formData.append("checkbox1", "");
 
- 		if (!quantityValidation("quantity")) {
-      document.getElementById("quantity").parentNode.setAttribute("data-error", "Veuillez choisir une quantité entre 0 et 99.");
-      document.getElementById("quantity").parentNode.setAttribute("data-error-visible", true);
- 			isValid = false;
-    } else 
-    document.getElementById("quantity").parentNode.setAttribute("data-error-visible", false);
+    for (let field of formData.entries()) {
+      // Reset error before testing 
+      resetError(field[0]);
 
- 		if (!locationValidation()) {
-      document.getElementById("locations").setAttribute("data-error", "Veuillez choisir une option.");
-      document.getElementById("locations").setAttribute("data-error-visible", true);
- 			isValid = false;
-    } else 
-      document.getElementById("locations").setAttribute("data-error-visible", false);
+      // Testing field to thrown errors and validate form
+      switch (field[0]) {
+        case 'first':
+        case 'last':
+          if (!textValidation(field[0])) { isValid = false; throwError(field[0], "Veuillez entrer 2 caractères ou plus."); }
+          break;
+        case 'birthdate':
+          if (!dateValidation(field[0])) { isValid = false; throwError(field[0], "Veuillez entrer une date de naissance.") };
+          break;
+        case 'email':
+          if (!emailValidation(field[0])) { isValid = false; throwError(field[0], "Veuillez entrer un email valide.") };
+          break;
+        case 'quantity':
+          if (!quantityValidation(field[0])) { isValid = false; throwError(field[0], "Veuillez choisir une quantité entre 0 et 99.") };
+          break;
+        case 'location':
+          if (!locationValidation()) { isValid = false; throwError(field[0], "Veuillez choisir une option.") };
+          break;
+        case 'checkbox1':
+          if (!checkboxValidation(field[0])) { isValid = false; throwError(field[0], "Veuillez vérifier que vous acceptez les termes et conditions.") };
+          break;
+      }
+    };
 
- 		if (!checkboxValidation("checkbox1")) {
-      document.getElementById("checkbox1").parentNode.setAttribute("data-error", "Veuillez vérifier que vous acceptez les termes et conditions.");
-      document.getElementById("checkbox1").parentNode.setAttribute("data-error-visible", true);
- 			isValid = false;
-    } else 
-      document.getElementById("checkbox1").parentNode.setAttribute("data-error-visible", false);
+    // Then submit
+    if (isValid) {
+      console.log("Form is valid > submit"); //form.submit();
+      // Iterate through entries and print them
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
 
-    // Then submit 
- 		if (isValid) {
-      console.log("Form is valid > submit");
- 			//form.submit();
+      // Show validation state
+      form.style.display = "none";
       document.getElementById("submit-success").style.display = "block";
- 		} else {
-      console.log("Form is not valid > show errors")
+    } else {
+      console.log("Form is not valid > throw errors");
+
+      // Hide validation state
+      form.style.display = "block";
       document.getElementById("submit-success").style.display = "none";
     }
- 	});
+  });
 
 
 /**
@@ -150,5 +186,3 @@ modalCloseBtn.forEach((btn) => btn.addEventListener("click", closeModal));
 function closeModal() {
   modalbg.style.display = "none";
 }
-
-
