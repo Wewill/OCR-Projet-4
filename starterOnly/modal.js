@@ -75,7 +75,7 @@ function dateValidation(field) {
  */
 function quantityValidation(field) {
   let regex = /^[0-9]+$/;
-  return regex.test(document.getElementById(field).value);
+  return (regex.test(document.getElementById(field).value) && document.getElementById(field).value >= 0 && document.getElementById(field).value <= 99);
 }
 
 function locationValidation() {
