@@ -32,6 +32,7 @@ const formData = document.querySelectorAll(".formData");
 // Form 
 const form = document.getElementById('form');
 document.getElementById("submit-success").style.display = "none";
+document.getElementById("btn-reset").style.display = "none";
 
 // Validation functions
 /**
@@ -156,12 +157,14 @@ document
       // Show validation state
       form.style.display = "none";
       document.getElementById("submit-success").style.display = "block";
+      document.getElementById("btn-reset").style.display = "block";
     } else {
       console.log("Form is not valid > throw errors");
 
       // Hide validation state
       form.style.display = "block";
       document.getElementById("submit-success").style.display = "none";
+      document.getElementById("btn-reset").style.display = "none";
     }
   });
 
@@ -184,5 +187,25 @@ modalCloseBtn.forEach((btn) => btn.addEventListener("click", closeModal));
 
 // close modal form
 function closeModal() {
+  // Hide modal
   modalbg.style.display = "none";
+
+  // Hide validation state
+  form.style.display = "block";
+  document.getElementById("submit-success").style.display = "none";
+  document.getElementById("btn-reset").style.display = "none";
+
+  // Reset form (this will clear all fields and reset to default values)
+  form.reset(); 
+  
+  // Reset any errors messages
+  let formData = new FormData(form);
+  // Default : Transform radio and checkbox null value first state  
+  if (formData.get("location") !== null) formData.append("location", null);
+  if (formData.get("checkbox1") !== null) formData.append("checkbox1", null);
+  for (let field of formData.entries()) {
+    // Reset error before testing 
+    resetError(field[0]);
+  };
+
 }
